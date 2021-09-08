@@ -1,0 +1,226 @@
+<html>
+    <head>
+<style>
+    div, span, ul, li, label {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline;
+  }
+    ul {
+      list-style: none;
+      position: relative;
+      text-align: right; 
+  }
+    li {
+     display: inline-block;
+      margin: 2px 6px;
+      position: relative; 
+  }
+    input {
+      margin: 0;
+      padding: 0;
+      vertical-align: baseline;
+  }
+    #buckets {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 100px 20px;
+      padding-top: 50px; 
+      margin-bottom: 20px;
+      border: 1px solid #bbbbbb;
+      }
+    #buckets li.fieldLabel {
+      position: absolute;
+      left: 0;
+      bottom: 5px;
+      text-transform: uppercase;
+      font-size: 14px;
+      line-height: 100%;
+      padding: 10px;
+      padding-left: 0;
+      margin-left: 0;
+      font-weight: bold;
+      color: #000000;
+  }
+    #buckets li.fieldLabel span {
+      font-size: 10px;
+      font-weight: normal;
+      color: #838383;
+      padding-left: 5px;
+  }
+    #buckets li.userInput {
+      width: 150px;
+      box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+      
+  }
+    #buckets li.userInput input {
+      position: relative;
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      font-size: 36px;
+      line-height: 36px;
+      margin: 0;
+      border: 0;
+      border-bottom: 2px none #838383;
+      color: #000000;
+      padding: 10px;
+      text-align: left;
+      z-index: 1;
+  }
+    #buckets li.userInput input, #buckets li.userInput label {
+      position: relative;
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      font-size: 36px;
+      line-height: 36px;
+      margin: 0;
+      border: 0;
+      border-bottom: 2px none #838383;
+      color: #000000;
+      padding: 10px;
+      text-align: left;
+      z-index: 1;
+  }
+  #buckets li.userInput input:focus, #buckets li.userInput label:focus {
+      border-bottom: 2px none #4793f9;
+      color: #1164d4;
+      background-color: #f6f9ff; 
+  }
+  #buckets li.userInput input:first-line {
+      display: inline-block;
+  }
+  #buckets li.userInput input:focus {
+      opacity: 1; 
+  }
+  #buckets li.userInput label {
+      position: absolute;
+      bottom: 0;
+      width: auto;
+      border-color: transparent;
+      background-color: transparent; 
+  }
+  #buckets li.userInput label:after {
+      position: absolute;
+      display: block;
+      font-size: 14px;
+      line-height: 10px;
+      right: 100%;
+      margin-right: -110px;
+      bottom: 20px;
+      text-align: right;
+      color: #838383; 
+  }
+  #buckets li.userInput label.percentlabel:after {
+      content: '%';
+  }
+  #buckets li.userInput label.decimallabel:after {
+      content: 'RGB';
+  }
+  #buckets li.userInput label.hexlabel:after {
+      content: 'Hex';
+  }
+  </style>
+  
+  <script type="text/javascript">
+  
+      /* Take the numeric percent value entered and convert it to a whole number out of 255 and to a hex value.  
+      If the percent entered is less than 7, add a leading 0 to the hex value, since it will be a single character hex value (0 - f), which we want to display as 00 - ff.
+      Uppercase the hex value to make the formatting pretty.
+      Update the Decimal and Hex input fields.*/
+      
+      function fromPercent(valNum) {
+          var decimalValue = Math.round(valNum*255/100);
+          
+          if (valNum < 7) {
+              var hexValue = "0"+decimalValue.toString(16).toUpperCase();
+          }
+          else {
+              var hexValue = decimalValue.toString(16).toUpperCase();
+          }
+          
+          document.getElementById("decimal").value=Math.round(valNum*255/100);
+          document.getElementById("hex").value=hexValue;
+      }
+      
+      /* Take the numeric decimal value entered and convert it to a percent of 255 and to a hex value.
+      If the numeric value out of 255 entered is less than 16, add a leading 0 to the hex value, since it will be a single character hex value (0 - f), which we want to display as 00 - ff.
+      Uppercase the hex value to make the formatting pretty.
+      Update the Percent and Hex input fields.*/
+      
+      function fromDecimal(valNum) {
+          var decimalValue = Math.round(valNum);
+          
+          if (valNum < 16) {
+              var hexValue = "0"+decimalValue.toString(16).toUpperCase();
+          }
+              else {
+                  var hexValue = decimalValue.toString(16).toUpperCase();
+              }
+          
+          document.getElementById("percent").value=Math.round(valNum/255*100);
+          document.getElementById("hex").value=hexValue;
+      }
+      
+      /* Uppercase the hex value.
+      Take the hex value entered and convert it to a whole number and then to a percent of 255.
+      Update the Percent and Decimal input fields.*/
+      
+      function fromHex(valNum) {
+          var hexValue = valNum.toString(16).toUpperCase();
+          document.getElementById("decimal").value=Math.round(parseInt(valNum, 16));
+          document.getElementById("percent").value=Math.round(parseInt(valNum, 16)/255*100);
+          document.getElementById("hex").value=hexValue;
+      }
+      
+      /* If the hex value is a number less than 10, add a leading 0 when the user moves focus out of the input field.
+      If the hex value entered is a-f, add a leading 0 when the user moves focus out of the input field.
+      Update the Percent and Decimal input fields.*/
+      
+      function fromHexChange(valNum) {
+      if (valNum < 10	) {
+          var hexValue = "0" + valNum.toString(16);
+      }
+      else if (valNum == "A" || valNum == "B" || valNum == "C" || valNum == "D" || valNum == "E" || valNum == "F") {
+          var hexValue = "0" + valNum.toString(16);
+      }
+      else {
+          var hexValue = valNum.toString(16);
+      }
+      document.getElementById("percent").value=Math.round(parseInt(valNum, 16)/255*100);
+      document.getElementById("decimal").value=Math.round(parseInt(valNum, 16));
+      document.getElementById("hex").value=hexValue;
+  }
+  </script>
+</head>
+
+<body>
+<div id="buckets">
+	<ul>
+		<li class="fieldLabel">Percent <span>0 - 100%</span></li>
+		<li class="userInput">
+			<input id="percent" type="number" min="0" max="100" maxlength="3" pattern="[0-9]*" placeholder="0" oninput="fromPercent(this.value)" onchange="fromPercent(this.value)" autocomplete="off" autofocus>
+			<label class="percentlabel"></label>
+		</li>
+	</ul>
+	<ul>
+		<li class="fieldLabel">RGB <span>0 - 255</span></li>
+		<li class="userInput">
+			<input id="decimal" type="number" min="0" max="255" maxlength="3" pattern="[0-9]*" placeholder="0" oninput="fromDecimal(this.value)" onchange="fromDecimal(this.value)" autocomplete="off">
+			<label class="decimallabel"></label>
+		</li>
+	</ul>
+	<ul>
+		<li class="fieldLabel">Hex <span>00 - ff</span></li>
+		<li class="userInput">
+			<input id="hex" type="text" maxlength="2" placeholder="00" oninput="fromHex(this.value)" onchange="fromHexChange(this.value)" autocomplete="off">
+			<label class="hexlabel"></label>
+		</li>
+	</ul>
+</div>
+</body>
+</html>
